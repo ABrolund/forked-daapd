@@ -67,6 +67,7 @@ GCRY_THREAD_OPTION_PTHREAD_IMPL;
 #include "remote_pairing.h"
 #include "player.h"
 #include "worker.h"
+#include "pipe.h"
 
 #ifdef HAVE_LIBCURL
 # include <curl/curl.h>
@@ -791,6 +792,15 @@ main(int argc, char **argv)
 #else
   mdns_no_mpd = 1;
 #endif
+  ret = pipewatcher_init();
+  if (ret != 0)
+    {
+      DPRINTF(E_FATAL, L_MAIN, "Pipe Watcher thread failed to start\n");
+
+      ret = EXIT_FAILURE;
+      goto pipewatcher_fail;
+    }
+
 
   /* Start Remote pairing service */
   ret = remote_pairing_init();
@@ -881,6 +891,9 @@ main(int argc, char **argv)
   remote_pairing_deinit();
 
  remote_fail:
+ pipewatcher_fail:
+  DPRINTF(E_LOG, L_MAIN, "Pipewatcher deinit\n");
+  pipewatcher_deinit();
 #ifdef MPD
   DPRINTF(E_LOG, L_MAIN, "MPD deinit\n");
   mpd_deinit();

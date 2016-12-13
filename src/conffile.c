@@ -59,6 +59,14 @@ static cfg_opt_t sec_general[] =
     CFG_STR("allow_origin", "*", CFGF_NONE),
     CFG_END()
   };
+  
+  /* general section structure */
+static cfg_opt_t sec_pipe[] =
+  {
+    CFG_STR("audio_pipe", "", CFGF_NONE),
+    CFG_STR("metadata_pipe","", CFGF_NONE),
+    CFG_END()
+  };
 
 /* library section structure */
 static cfg_opt_t sec_library[] =
@@ -163,6 +171,7 @@ static cfg_opt_t toplvl_cfg[] =
     CFG_SEC("spotify", sec_spotify, CFGF_NONE),
     CFG_SEC("sqlite", sec_sqlite, CFGF_NONE),
     CFG_SEC("mpd", sec_mpd, CFGF_NONE),
+    CFG_SEC("pipe", sec_pipe, CFGF_NONE),
     CFG_END()
   };
 
